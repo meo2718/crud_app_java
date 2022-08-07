@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 //import com.example.demo.models.InquiryForm;
 //Kanato0331
 //import com.example.demo.models.InquiryForm2;
-import com.example.demo.models.ItemForm;
+import com.example.demo.models.ItemFormOld;
 
 	@Repository
-	public interface ItemRepository extends JpaRepository<ItemForm, Long>{
-		Optional<ItemForm> findById(Long id);
-		List<ItemForm> findAll();
+	public interface ItemRepository extends JpaRepository<ItemFormOld, Long>{
+		Optional<ItemFormOld> findById(Long id);
+		List<ItemFormOld> findAll();
 		
 		
 	}
