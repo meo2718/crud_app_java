@@ -1,4 +1,3 @@
 # Ignore files
 volumes/db
 volumes/web
-volumes/app
