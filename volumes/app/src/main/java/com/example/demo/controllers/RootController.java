@@ -4,6 +4,8 @@ import java.util.List;
 //import java.util.Optional;
 //import java.util.Optional;
 
+//import javax.xml.crypto.dsig.TransformService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,7 @@ import com.example.demo.repositries.InquiryRepository;
 import com.example.demo.repositries.InquiryRepository2;
 //import com.example.demo.repositries.ItemListRepository;
 import com.example.demo.repositries.ItemRepository;
+import com.example.demo.servise.ItemService;
 
 
 @Controller
@@ -82,18 +85,18 @@ public class RootController {
 	public String create(ItemFormOld itemForm) {
 		return "root/item";
 	}
-
+    @Autowired
+    ItemService itemService;
 	@PostMapping("/item")
 	public String create(@Validated ItemFormOld itemForm, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "root/item";
 		}
-
-		// RDBと連携できることを確認しておきます。
-		repository3.saveAndFlush(itemForm);
+		itemService.formservice(itemForm);
 		itemForm.clear();
 		model.addAttribute("message", "商品を登録しました。");
 		return "root/item";
+
 	}
 	
 	@GetMapping("/list")
@@ -101,17 +104,19 @@ public class RootController {
 //rootcontorollerはitemformsをItemForm型の配列として
 //扱うと決めて,ItemRepositoryをfindAllした結果Itemformのリストをかえし
 //ステップオーバーでItemFormアレイリストに一覧情報が格納される
-        List<ItemFormOld> itemforms = repository3.findAll();
+        List<ItemFormOld> itemforms = itemService.list();
 //modelオブジェクトのaddAttributeを実行して格納した
 //Itemformアレイリストを表示させてる
         model.addAttribute("itemforms", itemforms); 
         return "root/list"; 
     }
+
+	
 	@GetMapping("/itemforms/{id}/edit")
     public String edit(@PathVariable Long id, Model model) { // ⑤
           //Optional <ItemForm> itemform = repository3.findById(id);
           //ItemForm i = itemform.get();
-        ItemFormOld itemform = repository3.findById(id).get();
+        ItemFormOld itemform = itemService.edit(id);
         model.addAttribute("itemform", itemform);
         return "itemforms/edit";
  //NG→/itemforms/edit
@@ -120,26 +125,26 @@ public class RootController {
 	
 	@PostMapping("/itemforms/{id}")
     public String update(@PathVariable Long id, Model model, @ModelAttribute ItemFormOld itemform) {
-        itemform.setId(id);
-        repository3.save(itemform);
-        List<ItemFormOld> itemforms = repository3.findAll();
+		itemService.update(id,itemform);
+        List<ItemFormOld> itemforms = itemService.list();
         model.addAttribute("itemforms", itemforms);
         return "root/list";
  //リダイレクトの場合は、先頭に「/」が必要
  //return "redirect:/customer/list";OK
  //return "redirect:customer/list";NG
     }
+	
 	@PostMapping("/itemforms/{id}/delete")
     public String destroy(@PathVariable Long id, Model model) {
-        repository3.deleteById(id);
-        List<ItemFormOld> itemforms = repository3.findAll();
+        itemService.destroy(id);
+        List<ItemFormOld> itemforms = itemService.list();
         model.addAttribute("itemforms", itemforms);
         return "root/list";
     }
 	
 	@GetMapping("/itemforms/{id}/show")
     public String show(@PathVariable Long id, Model model) { 
-        ItemFormOld itemform = repository3.findById(id).get();
+        ItemFormOld itemform = itemService.edit(id);
         model.addAttribute("itemform", itemform);
         return "itemforms/show";
 	}
