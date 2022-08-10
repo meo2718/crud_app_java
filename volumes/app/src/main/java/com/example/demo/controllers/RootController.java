@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.entities.ItemEntity;
+import com.example.demo.forms.ItemForm;
 import com.example.demo.models.InquiryForm;
 import com.example.demo.models.InquiryForm2;
-import com.example.demo.models.ItemFormOld;
+//import com.example.demo.models.ItemFormOld;
 import com.example.demo.repositries.InquiryRepository;
 import com.example.demo.repositries.InquiryRepository2;
 //import com.example.demo.repositries.ItemListRepository;
@@ -82,17 +84,17 @@ public class RootController {
 	}
 	
 	@GetMapping("/item")
-	public String create(ItemFormOld itemForm) {
+	public String create(ItemForm itemForm) {
 		return "root/item";
 	}
     @Autowired
     ItemService itemService;
 	@PostMapping("/item")
-	public String create(@Validated ItemFormOld itemForm, BindingResult bindingResult, Model model) {
+	public String create(ItemEntity itemEntity, @Validated ItemForm itemForm, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "root/item";
 		}
-		itemService.formservice(itemForm);
+		itemService.formservice(itemEntity);
 		itemForm.clear();
 		model.addAttribute("message", "商品を登録しました。");
 		return "root/item";
@@ -104,7 +106,7 @@ public class RootController {
 //rootcontorollerはitemformsをItemForm型の配列として
 //扱うと決めて,ItemRepositoryをfindAllした結果Itemformのリストをかえし
 //ステップオーバーでItemFormアレイリストに一覧情報が格納される
-        List<ItemFormOld> itemforms = itemService.list();
+        List<ItemEntity> itemforms = itemService.list();
 //modelオブジェクトのaddAttributeを実行して格納した
 //Itemformアレイリストを表示させてる
         model.addAttribute("itemforms", itemforms); 
@@ -116,7 +118,7 @@ public class RootController {
     public String edit(@PathVariable Long id, Model model) { // ⑤
           //Optional <ItemForm> itemform = repository3.findById(id);
           //ItemForm i = itemform.get();
-        ItemFormOld itemform = itemService.edit(id);
+        ItemEntity itemform = itemService.edit(id);
         model.addAttribute("itemform", itemform);
         return "itemforms/edit";
  //NG→/itemforms/edit
@@ -124,9 +126,9 @@ public class RootController {
     }
 	
 	@PostMapping("/itemforms/{id}")
-    public String update(@PathVariable Long id, Model model, @ModelAttribute ItemFormOld itemform) {
-		itemService.update(id,itemform);
-        List<ItemFormOld> itemforms = itemService.list();
+    public String update(@PathVariable Long id, Model model, @ModelAttribute ItemEntity itemEntity) {
+		itemService.update(id,itemEntity);
+        List<ItemEntity> itemforms = itemService.list();
         model.addAttribute("itemforms", itemforms);
         return "root/list";
  //リダイレクトの場合は、先頭に「/」が必要
@@ -137,14 +139,14 @@ public class RootController {
 	@PostMapping("/itemforms/{id}/delete")
     public String destroy(@PathVariable Long id, Model model) {
         itemService.destroy(id);
-        List<ItemFormOld> itemforms = itemService.list();
+        List<ItemEntity> itemforms = itemService.list();
         model.addAttribute("itemforms", itemforms);
         return "root/list";
     }
 	
 	@GetMapping("/itemforms/{id}/show")
     public String show(@PathVariable Long id, Model model) { 
-        ItemFormOld itemform = itemService.edit(id);
+        ItemEntity itemform = itemService.edit(id);
         model.addAttribute("itemform", itemform);
         return "itemforms/show";
 	}
