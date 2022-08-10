@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.entities.ItemEntity;
 //import com.example.demo.entities.ItemEntity;
 import com.example.demo.forms.ItemForm;
 import com.example.demo.models.InquiryForm;
@@ -84,7 +85,7 @@ public class RootController {
 	}
 	
 	@GetMapping("/item")
-	public String create(ItemForm itemForm) {
+	public String create(ItemFormOld itemForm) {
 		return "root/item";
 	}
     @Autowired
