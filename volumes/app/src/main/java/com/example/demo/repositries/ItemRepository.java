@@ -13,9 +13,9 @@ import com.example.demo.entities.ItemEntity;
 import com.example.demo.models.ItemFormOld;
 
 	@Repository
-	public interface ItemRepository extends JpaRepository<ItemFormOld, Long>{
-		Optional<ItemFormOld> findById(Long id);
-		List<ItemFormOld> findAll();
+	public interface ItemRepository extends JpaRepository<ItemEntity, Long>{
+		//Optional<ItemFormOld> findById(Long id);
+		//List<ItemFormOld> findAll();
 		
 		
 	}
