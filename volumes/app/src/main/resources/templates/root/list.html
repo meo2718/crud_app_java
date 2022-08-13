@@ -25,7 +25,8 @@
         </thead>
         <tbody>
           <!-- ② -->
-          <tr th:each="itemform:${itemforms}" th:object="${itemform}">
+          <tr th:each="itemForm:${itemlists}" th:object="${itemForm}">
+
             <!-- ③ -->
             <td th:text="*{id}"></td>
             <td th:text="*{name}"></td>
