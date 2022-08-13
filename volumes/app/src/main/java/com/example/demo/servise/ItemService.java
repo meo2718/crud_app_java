@@ -97,5 +97,4 @@ public class ItemService {
 	public void destroy(Long id) {
 		repository3.deleteById(id);
 	}
-
 }

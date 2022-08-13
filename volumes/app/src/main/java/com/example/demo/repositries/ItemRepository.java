@@ -11,12 +11,10 @@ import com.example.demo.forms.ItemForm;
 //import com.example.demo.models.InquiryForm;
 //Kanato0331
 //import com.example.demo.models.InquiryForm2;
-//import com.example.demo.models.ItemFormOld;
+import com.example.demo.models.ItemFormOld;
 
 	@Repository
 	public interface ItemRepository extends JpaRepository<ItemEntity, Long>{
 		//Optional<ItemEntity> findById(Long id);
 		//List<ItemEntity> findAll();
-		
-		
 	}

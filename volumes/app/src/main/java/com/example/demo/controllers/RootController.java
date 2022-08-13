@@ -104,6 +104,7 @@ public class RootController {
 		return "root/item";
 
 	}
+ refactoring
 	@GetMapping("/list")
   public String list(Model model) { 
       ItemForm itemForm = itemService.searchAll();
