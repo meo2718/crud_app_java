@@ -10,7 +10,7 @@
   <body>
     <div class="container">
       <h1>Editing</h1>
-      <form th:action="@{/itemforms/{id}(id=*{id})}" th:method="post" th:object="${itemform}">
+      <form th:action="@{/itemforms/{id}(id=*{id})}" th:method="post" th:object="${itemData}">
         <div class="form-group">
           <label class="control-label">名前</label>
           <!-- ① -->

@@ -5,11 +5,16 @@ package com.example.demo.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+//import java.util.Date;
+//import com.example.demo.forms.ItemForm;
+
+//import lombok.Data;
 
 //import lombok.Data;
 
@@ -19,15 +24,21 @@ public class ItemEntity implements Serializable {
 	private static final long serialVersionUID = -6647247658748349084L;
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
+	private Long id;
+	@Column(name = "name")
 	private String name;
-	
+	@Column(name = "price")
 	private String price;
-	
+	@Column(name = "content")
 	private String content;
 	
+	
+	
+	public Long getId() {
+		return id;
+	}
 	public void setId(Long id) {
         this.id = id;
     }
@@ -55,6 +66,8 @@ public class ItemEntity implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
+
+	
 
 
 }

@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
+//import com.example.demo.ItemFormListParam.ItemFormListParam;
 import com.example.demo.entities.ItemEntity;
+//import com.example.demo.entities.ItemEntity;
 import com.example.demo.forms.ItemForm;
 import com.example.demo.models.InquiryForm;
 import com.example.demo.models.InquiryForm2;
-//import com.example.demo.models.ItemFormOld;
+import com.example.demo.models.ItemFormOld;
 import com.example.demo.repositries.InquiryRepository;
 import com.example.demo.repositries.InquiryRepository2;
 //import com.example.demo.repositries.ItemListRepository;
@@ -85,71 +87,74 @@ public class RootController {
 	
 	@GetMapping("/item")
 	public String create(ItemForm itemForm) {
+//Itemformクラスの参照先→ItemForm.javaの中のデータをitem.htmlの
+//th:object="${itemForm}(↑の引数)で画面に出す。
 		return "root/item";
 	}
     @Autowired
     ItemService itemService;
 	@PostMapping("/item")
-	public String create(ItemEntity itemEntity, @Validated ItemForm itemForm, BindingResult bindingResult, Model model) {
+	public String create(@Validated ItemForm itemForm, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "root/item";
 		}
-		itemService.formservice(itemEntity);
+		itemService.create(itemForm);
 		itemForm.clear();
 		model.addAttribute("message", "商品を登録しました。");
 		return "root/item";
 
 	}
-	
 	@GetMapping("/list")
-    public String list(Model model) { 
-//rootcontorollerはitemformsをItemForm型の配列として
-//扱うと決めて,ItemRepositoryをfindAllした結果Itemformのリストをかえし
-//ステップオーバーでItemFormアレイリストに一覧情報が格納される
-        List<ItemEntity> itemforms = itemService.list();
-//modelオブジェクトのaddAttributeを実行して格納した
-//Itemformアレイリストを表示させてる
-        model.addAttribute("itemforms", itemforms); 
-        return "root/list"; 
-    }
-
+  public String list(Model model) { 
+      ItemForm itemForm = itemService.searchAll();
+      model.addAttribute("itemlists", itemForm);
+//itemlistsというkeyをセットし、DBからfinaAllで全検索した値をdisplaylistにいれて画面に返してる
+//viewでこのkeyを取り出してeachでitemEntityの数だけ回す
+      return "root/list"; 
+  }
 	
-	@GetMapping("/itemforms/{id}/edit")
-    public String edit(@PathVariable Long id, Model model) { // ⑤
-          //Optional <ItemForm> itemform = repository3.findById(id);
-          //ItemForm i = itemform.get();
-        ItemEntity itemform = itemService.edit(id);
-        model.addAttribute("itemform", itemform);
-        return "itemforms/edit";
- //NG→/itemforms/edit
- //上記の場合は、resources/templates/itemforms/edit.htmlが存在する必要がある。
-    }
-	
-	@PostMapping("/itemforms/{id}")
-    public String update(@PathVariable Long id, Model model, @ModelAttribute ItemEntity itemEntity) {
-		itemService.update(id,itemEntity);
-        List<ItemEntity> itemforms = itemService.list();
-        model.addAttribute("itemforms", itemforms);
-        return "root/list";
- //リダイレクトの場合は、先頭に「/」が必要
- //return "redirect:/customer/list";OK
- //return "redirect:customer/list";NG
-    }
-	
-	@PostMapping("/itemforms/{id}/delete")
-    public String destroy(@PathVariable Long id, Model model) {
-        itemService.destroy(id);
-        List<ItemEntity> itemforms = itemService.list();
-        model.addAttribute("itemforms", itemforms);
-        return "root/list";
-    }
-	
-	@GetMapping("/itemforms/{id}/show")
-    public String show(@PathVariable Long id, Model model) { 
-        ItemEntity itemform = itemService.edit(id);
-        model.addAttribute("itemform", itemform);
-        return "itemforms/show";
-	}
+//	@GetMapping("/list")
+//    public String list(Model model) { 
+//        List<ItemEntity> displaylist = itemService.searchAll();
+//        model.addAttribute("itemlists", displaylist);
+//        return "root/list"; 
+//    }
+//
+//	
+//	@GetMapping("/itemforms/{id}/edit")
+//    public String edit(@PathVariable Long id, Model model) {
+//        ItemEntity itemEntity = itemService.edit(id);
+//        model.addAttribute("itemData", itemEntity);
+//        return "itemforms/edit";
+// //NG→/itemforms/edit
+// //上記の場合は、resources/templates/itemforms/edit.htmlが存在する必要がある。
+//    }
+////	
+//	@PostMapping("/itemforms/{id}")
+//    public String update(@PathVariable Long id, Model model, @ModelAttribute ItemEntity itemEntity) {
+//		itemService.update(id,itemEntity);
+//        List<ItemEntity> displaylist = itemService.searchAll();
+//        model.addAttribute("itemlists", displaylist);
+//        return "root/list";
+// //リダイレクトの場合は、先頭に「/」が必要
+// //return "redirect:/customer/list";OK
+// //return "redirect:customer/list";NG
+//    }
+//	
+//	@PostMapping("/itemforms/{id}/delete")
+//    public String destroy(@PathVariable Long id, Model model) {
+//        itemService.destroy(id);
+//        List<ItemEntity> displaylist = itemService.searchAll();
+//        model.addAttribute("itemlists", displaylist);
+//        return "root/list";
+//    }
+//	
+//	@GetMapping("/itemforms/{id}/show")
+//    public String show(@PathVariable Long id, Model model) { 
+//        ItemEntity itemEntity = itemService.edit(id);
+//        model.addAttribute("itemData", itemEntity);
+//        return "itemforms/show";
+//	}
 
 
 }
