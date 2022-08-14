@@ -28,7 +28,7 @@ public class ItemService {
 	 * ユーザー情報 リポジトリ
 	 */
 	@Autowired
-	ItemRepository repository3;
+	ItemRepository itemrepository;
 	/*
 	 * ユーザー情報　新規登録
 	 * @params itemEntity ユーザー情報
@@ -40,61 +40,71 @@ public class ItemService {
 		itemEntity.setName(itemForm.getName());
 		itemEntity.setPrice(itemForm.getPrice());
 		itemEntity.setContent(itemForm.getContent());
-		repository3.save(itemEntity);
+		itemrepository.save(itemEntity);
 		//saveはsimpleJPArepositoryで実装
 	}
-	//	public void formservice(ItemForm itemForm, ItemEntity itemEntity) {
-	//		repository3.saveAndFlush(itemEntity);
-	//
-	//	}
 	/*
 	 * ユーザー情報全検索
 	 */
-	public ItemForm searchAll() {
-		//searchAllの型としてItemFormをかえす
-		List<ItemEntity> displayList = repository3.findAll();
-		ItemForm itemForm = new ItemForm();
+	//searchAll
+	public List<ItemForm> searchAll() {
+		
+		List<ItemEntity> itemEntityList = itemrepository.findAll();
 //itemServiceクラスはItemFormクラスに対してnewをお願いします
-		List<ItemForm> list = new ArrayList<ItemForm>();
+		ItemForm itemForm = new ItemForm();
 //itemServiceはlistをItemForm型の配列として扱うと決めてArrayListクラスをnewした
 //結果をlistの中にItemFormのリストとして返す
-		for(ItemEntity itemEntity: displayList) {
+		List<ItemForm> itemFormlist = new ArrayList<ItemForm>();
 //repository3をfindAllしたdisplayListの配列をItemEntity型のitemEntityという変数に
 //displayListから1つずつ配列を取り出していれていき、要素を取り出して出力し、listへいれる
-			ItemForm form = new ItemForm();
+		for(ItemEntity itemEntity: itemEntityList) {
 //itemServiceはItemFormクラスに対してnewして、formオブジェクトを生成する
-			form.setId(itemEntity.getId());
+			ItemForm form = new ItemForm();
 //生成したformオブジェクトに対してsetIdメソッドを実行し必要な値としてitemEntity
 //をgetIdした値を渡す。つまり、itemEntityのidをgetしてきてそれをsetしてformに代入し書き換えてる
+			form.setId(itemEntity.getId());
 			form.setName(itemEntity.getName());
 			form.setPrice(itemEntity.getPrice());
 			form.setContent(itemEntity.getContent());
-			list.add(form);
+			itemFormlist.add(form);
 			//itemForm = list.add(form);
-//itemFormのlistに書き換えた値がすべてはいる
 		}
+		//ItemForm itemForm2 = list.getList();
 		//temForm = list.set(0,itemForm);
-		itemForm.setList(list);
+		itemForm.setList(itemFormlist);
 		//itemForm = list.(form);
 		//ItemForm.setItemFormList(list);
+//呼び出し元のList<ItemForm>クラスをnewしたitemFormListに変換した値をいれて戻り値として返す
+		return itemFormlist;
+	}
+	/*
+	 * ユーザー情報編集
+	 */
+	public ItemForm edit(Long id) {
+//itemserviceはitemrepositoryの参照先であるItemRepositoryクラスに対してfindByIdを実行
+		ItemEntity itemEntity = itemrepository.findById(id).get();
+		ItemForm itemForm = new ItemForm();
+		itemForm.setId(itemEntity.getId());
+		itemForm.setName(itemEntity.getName());
+		itemForm.setPrice(itemEntity.getPrice());
+		itemForm.setContent(itemEntity.getContent());
 		return itemForm;
-//呼び出し元のItemFormクラスをnewしたitemFormに変換した値をいれたlistを返したい
 	}
-//	public List<ItemEntity> searchAll() {
-//		return repository3.findAll();
-//	}
-	//リポジトリを使いDBから全検索、その結果をItemEntityにいれる
-
-
-	public ItemEntity edit(Long id) {
-		return repository3.findById(id).get();
+	/*
+	 * ユーザー情報更新
+	 */	
+	public void update(Long id, ItemForm itemForm) {
+		ItemEntity itemEntity = new ItemEntity();
+		itemEntity.setId(itemForm.getId());
+		itemEntity.setName(itemForm.getName());
+		itemEntity.setPrice(itemForm.getPrice());
+		itemEntity.setContent(itemForm.getContent());
+		itemrepository.save(itemEntity);
 	}
-
-	public void update(Long id, ItemEntity itemEntity) {
-		repository3.save(itemEntity).setId(id);
-	}
-
+	/*
+	 * ユーザー情報削除
+	 */
 	public void destroy(Long id) {
-		repository3.deleteById(id);
+		itemrepository.deleteById(id);
 	}
 }
