@@ -1,29 +1,16 @@
 package com.example.demo.forms;
 
-//import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
-//import com.example.demo.entities.ItemEntity;
-
 import java.io.Serializable;
 import java.util.List;
-
-//import javax.persistence.Entity;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
-//import javax.persistence.Table;
-
 import lombok.Data;
-//import net.bytebuddy.asm.Advice.This;
+
 
 @Data
-
 public class ItemForm implements Serializable {
 	private static final long serialVersionUID = -6647247658748349084L;
 	
@@ -77,12 +64,7 @@ public class ItemForm implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	@Valid
-	private List<ItemForm> List;
 	
-	public List<ItemForm> getList() {
-		return List;
-	}
 	public void setList(List<ItemForm> list) {
 	
 	}

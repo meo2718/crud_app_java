@@ -1,22 +1,12 @@
 package com.example.demo.entities;
 
-//import javax.validation.constraints.NotBlank;
-//import javax.validation.constraints.Size;
-
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-//import java.util.Date;
-//import com.example.demo.forms.ItemForm;
-
-//import lombok.Data;
-
-//import lombok.Data;
 
 @Entity
 @Table(name = "item")
@@ -33,8 +23,6 @@ public class ItemEntity implements Serializable {
 	private String price;
 	@Column(name = "content")
 	private String content;
-	
-	
 	
 	public Long getId() {
 		return id;
@@ -66,8 +54,5 @@ public class ItemEntity implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-
-	
-
 
 }

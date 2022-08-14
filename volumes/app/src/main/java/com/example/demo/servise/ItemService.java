@@ -19,31 +19,28 @@ import com.example.demo.forms.ItemForm;
 //import com.example.demo.models.ItemFormOld;
 import com.example.demo.repositries.ItemRepository;
 
-/*
+/**
  * ユーザー情報　サービス
  */
 @Service
 public class ItemService {
-	/*
+	/**
 	 * ユーザー情報 リポジトリ
 	 */
 	@Autowired
 	ItemRepository itemrepository;
-	/*
+	/**
 	 * ユーザー情報　新規登録
 	 * @params itemEntity ユーザー情報
 	 */
 	public void create(ItemForm itemForm) {
-//itemFormをitemEntityに格納し直してリポジトリクラスを呼びsaveメソッドを使うことで
-//itemEntityの内容をdbへ登録できる。
 		ItemEntity itemEntity = new ItemEntity();
 		itemEntity.setName(itemForm.getName());
 		itemEntity.setPrice(itemForm.getPrice());
 		itemEntity.setContent(itemForm.getContent());
 		itemrepository.save(itemEntity);
-		//saveはsimpleJPArepositoryで実装
 	}
-	/*
+	/**
 	 * ユーザー情報全検索
 	 */
 	//searchAll
@@ -67,17 +64,12 @@ public class ItemService {
 			form.setPrice(itemEntity.getPrice());
 			form.setContent(itemEntity.getContent());
 			itemFormlist.add(form);
-			//itemForm = list.add(form);
 		}
-		//ItemForm itemForm2 = list.getList();
-		//temForm = list.set(0,itemForm);
 		itemForm.setList(itemFormlist);
-		//itemForm = list.(form);
-		//ItemForm.setItemFormList(list);
 //呼び出し元のList<ItemForm>クラスをnewしたitemFormListに変換した値をいれて戻り値として返す
 		return itemFormlist;
 	}
-	/*
+	/**
 	 * ユーザー情報編集
 	 */
 	public ItemForm edit(Long id) {
@@ -90,7 +82,8 @@ public class ItemService {
 		itemForm.setContent(itemEntity.getContent());
 		return itemForm;
 	}
-	/*
+	
+	/**
 	 * ユーザー情報更新
 	 */	
 	public void update(Long id, ItemForm itemForm) {
@@ -101,7 +94,7 @@ public class ItemService {
 		itemEntity.setContent(itemForm.getContent());
 		itemrepository.save(itemEntity);
 	}
-	/*
+	/**
 	 * ユーザー情報削除
 	 */
 	public void destroy(Long id) {

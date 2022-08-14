@@ -33,11 +33,11 @@
             <td th:text="*{price}"></td>
             <td th:text="*{content}"></td>
              <!-- ④ -->
-            <td><a class="btn btn-default btn-xs" th:href="@{/itemforms/{id}/show(id=*{id})}">参照</a></td>
-            <td><a class="btn btn-default btn-xs" th:href="@{/itemforms/{id}/edit(id=*{id})}">編集</a></td>
+            <td><a class="btn btn-default btn-xs" th:href="@{/item/itemforms/{id}/show(id=*{id})}">参照</a></td>
+            <td><a class="btn btn-default btn-xs" th:href="@{/item/itemforms/{id}/edit(id=*{id})}">編集</a></td>
             <td>
               <!-- ⑤ -->
-              <form th:action="@{/itemforms/{id}/delete(id=*{id})}" th:method="post">
+              <form th:action="@{/item/itemforms/{id}/delete(id=*{id})}" th:method="post">
                 <input class="btn btn-default btn-xs" type="submit" value="削除" />
               </form>
       
@@ -46,7 +46,7 @@
           </tr>
         </tbody>
       </table>
-      <a class="btn btn-default" href="/item">新規作成</a>
+      <a class="btn btn-default" href="/item/create">新規作成</a>
     </div>
   </body>
 </html>

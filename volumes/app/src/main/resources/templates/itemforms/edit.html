@@ -10,7 +10,7 @@
   <body>
     <div class="container">
       <h1>Editing</h1>
-      <form th:action="@{/itemforms/{id}(id=*{id})}" th:method="post" th:object="${itemData}">
+      <form th:action="@{/item/itemforms/{id}(id=*{id})}" th:method="post" th:object="${itemData}">
         <div class="form-group">
           <label class="control-label">名前</label>
           <!-- ① -->
@@ -28,7 +28,7 @@
         <button class="btn btn-default" type="submit">更新</button>
       </form>
       <div class="pull-right">
-        <a class="btn btn-link" href="/list">一覧画面へ</a>
+        <a class="btn btn-link" href="/item/list">一覧画面へ</a>
       </div>
     </div>
   </body>
