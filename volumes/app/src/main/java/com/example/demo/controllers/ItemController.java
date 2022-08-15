@@ -32,17 +32,18 @@ public class ItemController {
 	 */
 	@GetMapping("/create")
 	public String create(ItemForm itemForm) {
+//th:object="${itemForm}(↑の引数)で画面に出す。
 		return "root/item";
 	}
     /**
      * ユーザー情報を登録
      */
 	@PostMapping("/create")
-	public String create(@Validated ItemForm itemForm, BindingResult bindingResult, Model model) {
+	public String create(Long id, @Validated ItemForm itemForm, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "root/item";
 		}
-		itemService.create(itemForm);
+		itemService.create(itemForm,id);
 		itemForm.clear();
 		model.addAttribute("message", "商品を登録しました。");
 		return "root/item";
@@ -53,7 +54,10 @@ public class ItemController {
 	 */
 	@GetMapping("/list")
   public String list(Model model) { 
+//itemControllerはitemServiceの参照先である
+//itemServiceクラスに対してsearchAllメソッドを実行
       List<ItemForm> itemForm = itemService.searchAll();
+//itemlistsというkeyにitemFormの参照先であるItemFormリストオブジェクトをいれる
       model.addAttribute("itemlists", itemForm);
       return "root/list"; 
   }
@@ -62,6 +66,8 @@ public class ItemController {
 	 */
 	@GetMapping("/itemforms/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
+//itemControllerはitemServiceの参照先である
+//ItemServiceクラスに対してeditメソッドを実行し必要な値としてidを渡す
         ItemForm itemForm = itemService.edit(id);
         model.addAttribute("itemData", itemForm);
         return "itemforms/edit";

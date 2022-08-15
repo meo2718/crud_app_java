@@ -33,50 +33,63 @@ public class ItemService {
 	 * ユーザー情報　新規登録
 	 * @params itemEntity ユーザー情報
 	 */
-	public void create(ItemForm itemForm) {
-		ItemEntity itemEntity = convertFormToEntity(itemForm);
+	//createメソッドの引数にitemformをいれる
+	public void create(ItemForm itemForm, Long id) {
+		//itemServiceはItemEntityクラスに対してconvertFormToEntityという振る舞いをお願いして
+		//必要な値としてitemFormをメソッドに渡し変換して帰ってきたitemEntityを変数itemEntityへいれる
+		ItemEntity itemEntity = convertFormToEntity(itemForm,id);
 		itemrepository.save(itemEntity);
 	}
-	
+
 	/**
 	 * ユーザー情報全検索
 	 */
-	//searchAll
+	//searchAllメソッドの戻り値としてList<ItemForm>を指定しControllerで受け取る
 	public List<ItemForm> searchAll() {
-//itemServiceはitemRepositoryの参照先であるItemRepositoryクラスに対してfindAllを実行
+		//itemServiceはitemRepositoryの参照先であるItemRepositoryクラスに対してfindAllを実行
 		List<ItemEntity> itemEntityList = itemrepository.findAll();
-//itemServiceクラスはItemFormクラスに対してnewをお願いします
+		//itemServiceクラスはItemFormクラスに対してnewをお願いします
 		ItemForm itemForm = new ItemForm();
-//itemServiceはlistをItemForm型の配列として扱うと決めてArrayListクラスをnewした
-//結果をlistの中にItemFormのリストとして返す
+		//itemServiceはArrayListクラスをnewして必要な値としてItemFormクラスをいれる
+		//結果をitemFormlistの中にItemForm型のリストとして返す
 		List<ItemForm> itemFormlist = new ArrayList<ItemForm>();
-//itemRepositoryをfindAllしたitemEntityListの配列をItemEntity型のitemEntityという変数に
-//itemEntityListから1つずつ配列を取り出していれていき、要素を取り出して出力し、listへいれる
+		//itemRepositoryをfindAllしたitemEntityListの配列をItemEntity型のitemEntityという変数に
+		//itemEntityListから1つずつ配列を取り出していれていき、要素を出力し、itemFormlistへいれる
 		for(ItemEntity itemEntity: itemEntityList) {
-//itemServiceはItemFormクラスに対してconvertformという振る舞いをお願いして必要な値としてitemEntityを渡し変数formへいれる
-			ItemForm form = convertform(itemEntity);
+			//itemServiceはItemFormクラスに対してconvertformという振る舞いをお願いして必要な値としてitemEntityを渡し変数formへいれる
+			ItemForm form = convertEntityToForm(itemEntity);
+			//itemFormlistに対してaddメソッドを実行し必要な値として
+			//変換した値がはいってるformをわたす
 			itemFormlist.add(form);
 		}
+		//itemFormに対してsetListメソッドを実行し必要な値としてformがはいったitemFormListをわたす
 		itemForm.setList(itemFormlist);
-//呼び出し元のList<ItemForm>クラスをnewしたitemFormListに変換した値をいれて戻り値として返す
+		//呼び出し元のList<ItemForm>クラスをnewしたitemFormListに変換した値をいれて戻り値として返す
 		return itemFormlist;
 	}
 
 	/**
 	 * ユーザー情報編集
 	 */
+	//editメソッドの戻り値としてItemFormを指定しControllerで受け取る
 	public ItemForm edit(Long id) {
-//itemserviceはitemrepositoryの参照先であるItemRepositoryクラスに対してfindByIdを実行
+		//itemserviceはitemrepositoryの参照先であるItemRepositoryクラスに対してfindByIdを実行
 		ItemEntity itemEntity = itemrepository.findById(id).get();
+		//itemServiceはItemFormクラスに対してconvertEntityToFormという振る舞いをお願いして
+		//必要な値としてitemEntityをメソッドに渡し変換して帰ってきたitemFormを変数itemFormへいれる
 		ItemForm itemForm = convertEntityToForm(itemEntity);
 		return itemForm;
 	}
-	
+
 	/**
 	 * ユーザー情報更新
 	 */	
 	public void update(Long id, ItemForm itemForm) {
-		ItemEntity itemEntity = convertFormToEntities(itemForm);
+		//itemServiceはItemEntityクラスに対してconvertFormToEntityという振る舞いをお願いして
+		//必要な値としてitemFormをメソッドに渡し変換して帰ってきたitemEntityを変数itemEntityへいれる
+		ItemEntity itemEntity = convertFormToEntity(itemForm, id);
+		//itemRepositoryに対してseveメソッドを実行し、
+		//必要な値として変換した値がはいったitemEntityをわたしセーブする
 		itemrepository.save(itemEntity);
 	}
 
@@ -88,26 +101,25 @@ public class ItemService {
 	}
 	/**
 	 * convert
-	 * @param itemForm
-	 * @return itemEntity
+	 * @param id 
 	 */
-	public ItemEntity convertFormToEntity(ItemForm itemForm) {
+	//formからEntityへ変換
+	//生成したitemEntityオブジェクトに対してsetNameメソッドを実行し必要な値としてitemForm
+	//をgetNameした値を渡す。つまり、itemFormのNameをgetしてきてそれをsetしてitemEntityに代入し書き換えてる
+	public ItemEntity convertFormToEntity(ItemForm itemForm, Long id) {
 		ItemEntity itemEntity = new ItemEntity();
+		if (null != id ) {
+			itemEntity.setId(itemForm.getId());
+		}
 		itemEntity.setName(itemForm.getName());
 		itemEntity.setPrice(itemForm.getPrice());
 		itemEntity.setContent(itemForm.getContent());
 		return itemEntity;
 	}
-	
-	public ItemEntity convertFormToEntities(ItemForm itemForm) {
-		ItemEntity itemEntity = new ItemEntity();
-		itemEntity.setId(itemForm.getId());
-		itemEntity.setName(itemForm.getName());
-		itemEntity.setPrice(itemForm.getPrice());
-		itemEntity.setContent(itemForm.getContent());
-		return itemEntity;
-	}
-	
+
+	//formをentityからformへ変換
+	//生成したformオブジェクトに対してsetIdメソッドを実行し必要な値としてitemEntity
+	//をgetIdした値を渡す。つまり、itemEntityのidをgetしてきてそれをsetしてformに代入し書き換えてる
 	public ItemForm convertEntityToForm(ItemEntity itemEntity) {
 		ItemForm itemForm = new ItemForm();
 		itemForm.setId(itemEntity.getId());
@@ -115,16 +127,5 @@ public class ItemService {
 		itemForm.setPrice(itemEntity.getPrice());
 		itemForm.setContent(itemEntity.getContent());
 		return itemForm;
-	}
-//formをentityからformへ変換
-//生成したformオブジェクトに対してsetIdメソッドを実行し必要な値としてitemEntity
-//をgetIdした値を渡す。つまり、itemEntityのidをgetしてきてそれをsetしてformに代入し書き換えてる
-	public ItemForm convertform(ItemEntity itemEntity) {
-		ItemForm form = new ItemForm();
-		form.setId(itemEntity.getId());
-		form.setName(itemEntity.getName());
-		form.setPrice(itemEntity.getPrice());
-		form.setContent(itemEntity.getContent());
-		return form;
 	}
 }
