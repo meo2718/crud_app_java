@@ -35,10 +35,9 @@ public class ItemService {
 	 */
 	//createメソッドの引数にitemformをいれる
 	public void create(ItemForm itemForm, Long id) {
-		//itemServiceはItemEntityクラスに対してconvertFormToEntityという振る舞いをお願いして
-		//必要な値としてitemFormをメソッドに渡し変換して帰ってきたitemEntityを変数itemEntityへいれる
-		ItemEntity itemEntity = convertFormToEntity(itemForm,id);
-		itemrepository.save(itemEntity);
+		//itemServiceはItemRepositoryに対してsaveメソッドを実行して
+		//必要な値として変換メソッドとその引数としてitemFormとidを渡す
+		itemrepository.save(convertFormToEntity(itemForm,id));
 	}
 
 	/**
@@ -48,22 +47,16 @@ public class ItemService {
 	public List<ItemForm> searchAll() {
 		//itemServiceはitemRepositoryの参照先であるItemRepositoryクラスに対してfindAllを実行
 		List<ItemEntity> itemEntityList = itemrepository.findAll();
-		//itemServiceクラスはItemFormクラスに対してnewをお願いします
-		ItemForm itemForm = new ItemForm();
 		//itemServiceはArrayListクラスをnewして必要な値としてItemFormクラスをいれる
 		//結果をitemFormlistの中にItemForm型のリストとして返す
 		List<ItemForm> itemFormlist = new ArrayList<ItemForm>();
 		//itemRepositoryをfindAllしたitemEntityListの配列をItemEntity型のitemEntityという変数に
 		//itemEntityListから1つずつ配列を取り出していれていき、要素を出力し、itemFormlistへいれる
 		for(ItemEntity itemEntity: itemEntityList) {
-			//itemServiceはItemFormクラスに対してconvertformという振る舞いをお願いして必要な値としてitemEntityを渡し変数formへいれる
-			ItemForm form = convertEntityToForm(itemEntity);
 			//itemFormlistに対してaddメソッドを実行し必要な値として
-			//変換した値がはいってるformをわたす
-			itemFormlist.add(form);
+			//変換メソッドと引数にitemEntityをわたす
+			itemFormlist.add(convertEntityToForm(itemEntity));
 		}
-		//itemFormに対してsetListメソッドを実行し必要な値としてformがはいったitemFormListをわたす
-		itemForm.setList(itemFormlist);
 		//呼び出し元のList<ItemForm>クラスをnewしたitemFormListに変換した値をいれて戻り値として返す
 		return itemFormlist;
 	}

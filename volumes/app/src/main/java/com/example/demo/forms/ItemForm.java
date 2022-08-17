@@ -64,9 +64,5 @@ public class ItemForm implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
-	public void setList(List<ItemForm> list) {
-	
-	}
 
 }
